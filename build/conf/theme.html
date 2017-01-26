@@ -1,0 +1,58 @@
+<style is="custom-style">
+    :root {
+        --default-primary-color: #33343c;
+        --dark-primary-color: #3d4953;
+        --light-primary-color: #fafafa;
+        --light-secondary-color: #e2e9e9;
+        --text-primary-color: #FFFFFF;
+        --accent-color: #F3CA40;
+        --dark-button-color: #ed9c33;
+        --light-button-color: #f1b237;
+        --primary-text-color: #212121;
+        --secondary-text-color: #727272;
+        --divider-color: #ccc;
+        --hover-color: #eee;
+        --selected-color: #bbb;
+    }
+</style>
+<style>
+    [hidden] {
+        display: none !important;
+    }
+
+    html,
+    body {
+        font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, 'sans-serif' !important;
+        font-size: 13px;
+    }
+
+    body.fullbleed {
+        margin: 0;
+        height: 100vh;
+    }
+
+    body[unresolved] {
+        opacity: 0;
+        display: block;
+        overflow: hidden;
+        position: relative;
+    }
+
+    body {
+        transition: opacity ease-in 0.2s;
+    }
+
+    a {
+        transition: color 0.1s linear;
+        text-decoration: none;
+        color: var(--text-primary-color);
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    stv-header > .main {
+        font-weight: 300;
+    }
+</style>

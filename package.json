@@ -1,0 +1,17 @@
+{
+    "name": "biertool",
+    "version": "0.1.0",
+    "description": "",
+    "repository": {
+        "type": "git",
+        "url": ""
+    },
+    "scripts": {
+        "build": "node ./build.js"
+    },
+    "devDependencies": {
+        "async": "^2.0.0-rc.6",
+        "shelljs": "^0.7.0",
+        "vulcanize": "1.14.8"
+    }
+}

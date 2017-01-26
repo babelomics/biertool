@@ -1,0 +1,483 @@
+<script src="bower_components/jsorolla/src/lib/utils.js"></script>
+<script src="bower_components/stevia-elements/src/utils/utils.js"></script>
+<script src="bower_components/jsorolla/src/lib/opencga-manager.js"></script>
+<script src="bower_components/jsorolla/src/lib/cellbase-manager.js"></script>
+<script src="bower_components/stevia-elements/src/manager/stevia-manager.js"></script>
+<script src="bower_components/stevia-elements/src/manager/biodb-manager.js"></script>
+
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<script src="bower_components/cookies-js/dist/cookies.min.js"></script>
+<script src="bower_components/crypto-js/core.js"></script>
+<script src="bower_components/crypto-js/sha1.js"></script>
+<script src="bower_components/async/dist/async.min.js"></script>
+<script src="bower_components/stevia-elements/src/utils/svg.js"></script>
+<script src="bower_components/d3/d3.min.js"></script>
+<script src="bower_components/d3-dtree/dist/dTree.min.js"></script>
+<script src="bower_components/lodash/dist/lodash.min.js"></script>
+
+<link rel="import" href="bower_components/stevia-elements/src/stv-header.html">
+<link rel="import" href="bower_components/stevia-elements/src/stv-application-behavior.html">
+<link rel="import" href="bower_components/stevia-elements/src/stv-footer.html">
+<link rel="import" href="bower_components/stevia-elements/src/stv-select.html">
+<link rel="import" href="bower_components/stevia-elements/src/stv-select-box.html">
+<link rel="import" href="bower_components/stevia-elements/src/stv-panel.html">
+<link rel="import" href="bower_components/stevia-elements/src/dropdown/stv-dropdown.html">
+<link rel="import" href="bower_components/stevia-elements/src/stv-feedback.html">
+<link rel="import" href="bower_components/stevia-elements/src/stv-launcher/stv-launcher.html">
+<link rel="import" href="bower_components/stevia-elements/src/stv-dialog/stv-dialog.html">
+<link rel="import" href="bower_components/stevia-elements/src/table/stv-table.html">
+<link rel="import" href="bower_components/stevia-elements/src/stv-form-box.html">
+<link rel="import" href="bower_components/stevia-elements/src/stv-tooltip.html">
+<link rel="import" href="bower_components/stevia-elements/src/stv-wizard.html">
+<link rel="import" href="bower_components/stevia-elements/src/stv-progress-bar.html">
+<link rel="import" href="bower_components/stevia-elements/src/stv-import-file.html">
+<link rel="import" href="bower_components/stevia-elements/src/validator/stv-validator.html">
+<link rel="import" href="bower_components/stevia-elements/src/ontology/stv-ontology-tree.html">
+<link rel="import" href="bower_components/stevia-elements/src/ontology/stv-ontology-tree-item.html">
+
+
+<link rel="import" href="bower_components/jsorolla/src/lib/components/jso-application-behavior.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/components/opencga/jso-opencga-manager-behavior.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/components/jso-panel.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/components/jso-wizard.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/components/jso-tooltip.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/components/jso-opencga-input-text.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/components/jso-select.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/components/jso-opencga-button-tooltip.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/components/jso-genome-viewer-element.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/components/table/jso-table.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/validator/jso-validator.html">
+
+<link rel="import" href="bower_components/iron-list/iron-list.html">
+<link rel="import" href="bower_components/paper-slider/paper-slider.html">
+
+<link rel="import" href="bower_components/jsorolla/src/lib/components/opencga/jso-opencga-header.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/components/opencga/jso-opencga-footer.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/components/opencga/samples/jso-opencga-sample-browser.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/components/opencga/files/jso-opencga-upload-file.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/components/opencga/files/jso-opencga-create-study.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/components/opencga/files/jso-opencga-create-project.html">
+<link rel="import" href="bower_components/jsorolla/src/lib/components/opencga/files-new/jso-opencga-file-browser.html">
+
+<link rel="import" href="src/bier-variant-browser.html">
+<link rel="import" href="src/biertool-home.html">
+<script src="src/FilterHistory.js"></script>
+
+<dom-module id="biertool-element">
+    <style is="custom-style" include="iron-flex iron-flex-reverse iron-flex-alignment iron-flex-factors iron-positioning">
+        :host {
+            display: block;
+            position: relative;
+            cursor: default;
+            font-size: 13px;
+            background-color: var(--light-primary-color);
+            height: 100%;
+            width: 100%;
+        }
+
+        jso-opencga-header {
+            position: absolute;
+            top: 0;
+        }
+
+        jso-opencga-footer {
+            position: absolute;
+            bottom: 0;
+            height: 60px;
+        }
+
+        .content {
+            position: absolute;
+            width: 100%;
+            top: 60px;
+            /*height: calc(100vh - 60px);*/
+            /*background-color: transparent;*/
+        }
+
+        #fileBrowserPanel {
+            position: absolute;
+            top: 0px;
+            left: 0;
+            width: 700px;
+            height: 600px;
+            min-width: 600px;
+            min-height: 500px;
+        }
+
+        #sampleBrowserPanel {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 600px;
+        }
+
+        #dropmenu {
+            position: fixed !important;
+            right: 10px !important;
+            top: 50px !important;
+            width: 200px;
+            left: calc(100vw - 210px) !important;
+        }
+
+        @media (max-width: 1100px) {
+            .option-text {
+                display: none;
+            }
+        }
+
+        .userid {
+            color: var(--accent-color);
+            font-size: 16px;
+        }
+
+        #description {
+            color: var(--accent-color);
+            font-weight: normal;
+        }
+
+        biertool-home {
+            height: calc(100vh - 160px);
+            overflow-y: auto;
+        }
+
+        biertool-form,
+        stv-report {
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+        }
+
+        bier-variant-browser {
+            height: calc(100vh - 60px);
+            overflow-y: scroll;
+        }
+    </style>
+    <template>
+
+        <div class="content" menu-option="home">
+            <biertool-home id="home" on-start="handleHomeStart" isLogged="{{isLogged}}"></biertool-home>
+        </div>
+        <div id="jobContent" class="content" menu-option="job">
+            <stv-report id="report"></stv-report>
+        </div>
+        <div class="content" menu-option="home,variantbrowser">
+            <stv-panel id="fileBrowserPanel" hidden collapsible movable closable expandible resizable on-hidden="handlePanelHidden">
+                <div class="header">
+                    <i class="fa fa-cloud"></i>&nbsp; Browse my data
+                </div>
+                <jso-opencga-file-browser enable-auto-index class="container" id="browser" projects="{{projects}}" bioformats="{{bioformats}}" mode="file" on-need-refresh="handleUserNeedRefresh" on-viewvariantbrowser="handleSampleSelect2" on-viewvariantbrowserfam="handleVariantBrowserFam" sample-selected="{{sampleSelected}}"></jso-opencga-file-browser>
+            </stv-panel>
+            <!-- <stv-panel hidden collapsible closable movable id="sampleBrowserPanel" on-hidden="handlePanelHidden">
+                <div class="header">
+                    <i class="fa fa-folder-open-o"></i> Samples
+                </div>
+                <jso-opencga-sample-browser disable-case-control enable-auto-index enable-variant-browser class="container" id="sampleBrowser" projects="{{projects}}" bioformats="{{bioformats}}" samples="{{samples}}" filtered-samples="{{filteredSamples}}" on-viewvariantbrowser="handleSampleSelect" on-need-refresh="handleUserNeedRefresh"></jso-opencga-sample-browser>
+            </stv-panel> -->
+            <stv-feedback id="feedback" hidden on-feedbackend="handleFeedback"></stv-feedback>
+        </div>
+
+        <div class="content" menu-option="variantbrowser" style="height: 100%;">
+            <bier-variant-browser id="variantBrowser"></bier-variant-browser>
+        </div>
+
+        <jso-opencga-header id="jsoHeader" selected-option="{{selectedOption}}" user-data="{{userData}}" on-logout="handleLogout" hide-jobs hide-browse show-menu-on-login>
+            <div class="icon">
+                <img src="images/bier-text.svg" style="height: 50px;margin: 5px 0px 0 0;">
+            </div>
+            <div class="title horizontal layout center" style="margin-left:15px;">
+                BIER Tool
+            </div>
+            <span id="description" class="description">
+                0.0.1
+            </span>
+
+            <div id="menu" class="menu horizontal layout center flex">
+                <!-- <div class="flex"></div> -->
+                <div style="margin-left:4vw;"></div>
+                <div class="option" on-click="handleMenuOption" data-option="home" title="Go to home page">
+                    <i class="fa fa-home"></i>
+                    <span class="option-text">Home</span>
+                </div>
+                <div title="Browse my data" class="option" on-click="handleLoggedOnlyMenuPanel" data-panel="fileBrowserPanel">
+                    <i class="fa fa-cloud"></i>
+                    <span class="option-text">Study Browser</span>
+                </div>
+                <!-- <div title="Browse samples" class="option" on-click="handleLoggedOnlyMenuPanel" data-panel="sampleBrowserPanel">
+                    <i class="fa fa-users"></i>
+                    <span class="option-text">Study Browser</span>
+                </div> -->
+                <div class="flex"></div>
+            </div>
+
+            <stv-dropdown dark class="helpmenu" selected-option="{{selectedOption}}">
+                <div data-button><i class="fa fa-question-circle"></i></div>
+                <ul data-menu id="dropmenu">
+                    <li>
+                        <a href="https://github.com/babelomics/bierapp/wiki" target="_blank">
+                            <i class="fa fa-book"></i> &nbsp; Documentation
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/babelomics/bierapp/wiki/Tutorial" target="_blank">
+                            <i class="fa fa-compass"></i> &nbsp; Tutorial
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/babelomics/bierapp/" target="_blank">
+                            <i class="fa fa-github"></i> &nbsp; Source code
+                        </a>
+                    </li>
+                </ul>
+            </stv-dropdown>
+        </jso-opencga-header>
+
+        <jso-opencga-footer menu-option="home,loging,singup,profile,remember">
+            BierTool 2016
+            <br> Created by <b>Computational Genomics Department</b> at <b>Centro de Investigación Principe Felipe</b>
+        </jso-opencga-footer>
+    </template>
+
+    <script>
+        Polymer({
+            is: "biertool-element",
+            behaviors: [JsoApplicationBehavior],
+            properties: {
+                userData: {
+                    type: Object,
+                    notify: true,
+                    observer: 'userDataChanged'
+                },
+                projects: {
+                    type: Array,
+                    notify: true,
+                    observer: 'projectsChanged'
+                },
+                allowedTools: {
+                    type: Array,
+                    value: function() {
+                        return ["bierapp"];
+                    }
+                },
+                browserHidden: {
+                    type: Boolean,
+                    value: true,
+                    reflectToAttribute: true
+                },
+                uploadHidden: {
+                    type: Boolean,
+                    value: true,
+                    reflectToAttribute: true
+                },
+                createStudyHidden: {
+                    type: Boolean,
+                    value: true,
+                    reflectToAttribute: true
+                },
+                createProjectHidden: {
+                    type: Boolean,
+                    value: true,
+                    reflectToAttribute: true
+                },
+                bioformats: {
+                    type: Array,
+                    notify: true,
+                    value: [{
+                        text: "VCF 4.0",
+                        value: "VARIANT",
+                        validator: VCFValidator
+                    }]
+                },
+                samples: {
+                    type: Array,
+                    value: function() {
+                        return [];
+                    },
+                    observer: "samplesChanged"
+                },
+                filteredSamples: {
+                    type: Array,
+                    value: function() {
+                        return [];
+                    },
+                    observer: "filteredSamplesChanged"
+                },
+                sampleSelected: {
+                    type: Array,
+                    value: function() {
+                        return [];
+                    },
+                    observer: "sampleSelectedChanged"
+                },
+
+            },
+            annonymousLogin: function() {
+                this.$.jsoHeader.anonymousSign();
+            },
+            ready: function() {
+                var me = this;
+                this.selectedOption = "home";
+                this.checkShowMenuOnLogin();
+            },
+            handleFileSelect: function(e) {},
+            handleJobSelect: function(e) {
+                var me = this;
+                var job = e.detail;
+                if (job && job.status === 'DONE') {
+                    this.set('selectedOption', 'job');
+                    this.$.report.hideJobInformation = true;
+                    this.$.report.set('job', job);
+                }
+            },
+            handleLogin: function() {
+                if (Cookies('bioinfo_user').indexOf("anonymous___") != -1) {
+                    this.setMenu('home');
+                } else {
+                    this.setMenu('home');
+                }
+                if (this._lastLoggedPanel) {
+                    this._lastLoggedPanel.show();
+                    this._lastLoggedPanel = null;
+                }
+                if (this._lastLoggedMenu) {
+                    this.setMenu(this._lastLoggedMenu);
+                    this._lastLoggedMenu = null;
+                }
+                this.$.home.isLogged = true;
+                this.checkShowMenuOnLogin();
+            },
+            handleLogout: function() {
+                this.$.home.isLogged = false;
+                this.setMenu('home');
+                this.checkShowMenuOnLogin();
+            },
+            userDataChanged: function(neo, old) {
+                var me = this;
+                if (this.userData) {
+                    var projectIds = [];
+                    for (var i = 0; i < this.userData.projects.length; i++) {
+                        var p = this.userData.projects[i];
+                        projectIds.push(p.id);
+                    }
+                    var projects = [];
+                    OpencgaManager.projects.studies({
+                        id: projectIds.join(','),
+                        query: {
+                            sid: Cookies("bioinfo_sid")
+                        },
+                        request: {
+                            success: function(response) {
+                                if (response.response[0].errorMsg === '' || response.response[0].errorMsg == null) {
+                                    for (var i = 0; i < response.response.length; i++) {
+                                        var r = response.response[i];
+                                        me.userData.projects[i].studies = r.result;
+                                        projects.push(me.userData.projects[i]);
+                                    }
+                                    /* update projects property*/
+                                    me.projects = projects;
+                                } else {
+                                    console.log(response.error);
+                                    console.log(response.response[0].errorMsg);
+                                }
+                                me.loading = false;
+                            },
+                            error: function() {
+                                console.log('Server error, try again later.');
+                                me.loading = false;
+                            }
+                        }
+                    });
+                } else {
+                    console.log("no user data")
+                }
+            },
+            projectsChanged: function(neo, old) {},
+            handleUserNeedRefresh: function() {
+                this.$.jsoHeader.getUserInfo(true);
+            },
+            handleFeedback: function() {
+                this.$.feedback.hidden = !this.$.feedback.hidden;
+            },
+            // handleSampleSelect: function(e) {
+            //     var samplesArray = [];
+            //     var samplesIds = [];
+            //     var samples = e.currentTarget.querySelectorAll('jso-opencga-sample-list-item[selected]');
+            //
+            //     if (samples.length == 0) {
+            //         if (this.filteredSamples.length == 0) {
+            //             alert('You must select at least one sample');
+            //             return;
+            //         } else {
+            //             for (var i = 0; i < this.filteredSamples.length; i++) {
+            //                 var s = this.filteredSamples[i];
+            //                 if (s.status != 'READY') {
+            //                     alert('All selected samples must be READY');
+            //                     return;
+            //                 }
+            //             }
+            //             this.$.variantBrowser.samples = this.filteredSamples;
+            //             this.$.variantBrowser.study = this.$.sampleBrowser.selectedStudy.study;
+            //         }
+            //
+            //     } else {
+            //         for (var i = 0; i < samples.length; i++) {
+            //             samplesIds.push(samples[i].sample.id);
+            //             samplesArray.push(samples[i].sample);
+            //         }
+            //         for (var i = 0; i < samplesArray.length; i++) {
+            //             var s = samplesArray[i];
+            //             if (s.status != 'READY') {
+            //                 alert('All selected samples must be READY');
+            //                 return;
+            //             }
+            //         }
+            //
+            //         var selectedStudy = this.$.sampleBrowser.selectedStudy.study;
+            //
+            //         this.$.variantBrowser.samples = samplesArray;
+            //         this.$.variantBrowser.study = selectedStudy;
+            //     }
+            //     this.setMenu('variantbrowser');
+            //     this.$.sampleBrowserPanel.hidden = true;
+            //     this.$.fileBrowserPanel.hidden = true;
+            //
+            // },
+            handleSampleSelect2: function(e) {
+                var samplesArray = [];
+                var samplesIds = [];
+                if (this.sampleSelected.length == 0) {
+                    alert('You must select at least one sample');
+                    return;
+                } else {
+                    for (var i = 0; i < this.sampleSelected.length; i++) {
+                        samplesIds.push(this.sampleSelected[i].id);
+                        samplesArray.push(this.sampleSelected[i]);
+                    }
+                    for (var i = 0; i < this.sampleSelected.length; i++) {
+                        var s = this.sampleSelected[i];
+                        if (s.status != 'READY') {
+                            alert('All selected samples must be READY! Select samples from VCF in READY status.');
+                            return;
+                        }
+                    }
+                    this.$.variantBrowser.samples = samplesArray;
+                    this.$.variantBrowser.study = this.$.browser.selectedStudy.study;
+                }
+
+                this.setMenu('variantbrowser');
+                this.$.fileBrowserPanel.hidden = true;
+
+            },
+            handleVariantBrowserFam: function(e) {
+                this.$.variantBrowser.samples = [];
+                this.$.variantBrowser.samples = e.detail.samples;
+                this.$.variantBrowser.study = this.$.browser.selectedStudy.study;
+                this.setMenu('variantbrowser');
+                this.$.fileBrowserPanel.hidden = true;
+            },
+            samplesChanged: function(neo, old) {},
+            filteredSamplesChanged: function(neo, old) {},
+            sampleSelectedChanged: function(neo, old) {}
+        });
+    </script>
+</dom-module>

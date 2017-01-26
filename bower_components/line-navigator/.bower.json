@@ -1,0 +1,13 @@
+{
+  "name": "line-navigator",
+  "homepage": "https://github.com/anpur/line-navigator",
+  "_release": "df8116f40b",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "df8116f40b5139c647cc6f5daa81e5b12c18ce86"
+  },
+  "_source": "git://github.com/anpur/line-navigator.git",
+  "_target": "*",
+  "_originalSource": "git://github.com/anpur/line-navigator"
+}
